@@ -1,0 +1,20 @@
+<mat-table [dataSource]="dataSource">
+  <ng-container cdkColumnDef="position">
+    <mat-header-cell *cdkHeaderCellDef> No. </mat-header-cell>
+    <mat-cell *cdkCellDef="let row"> {{row.id}} </mat-cell>
+  </ng-container>
+
+  <ng-container cdkColumnDef="name">
+    <mat-header-cell *cdkHeaderCellDef> Name </mat-header-cell>
+    <mat-cell *cdkCellDef="let row"> {{row.name}} </mat-cell>
+  </ng-container>
+
+  <ng-container cdkColumnDef="timestamp">
+    <mat-header-cell *cdkHeaderCellDef> Timestamp </mat-header-cell>
+    <mat-cell *cdkCellDef="let row"> {{row.timestamp}} </mat-cell>
+  </ng-container>
+
+  <!-- Header and Row Declarations -->
+  <mat-header-row *cdkHeaderRowDef="['position', 'name', 'timestamp']"></mat-header-row>
+  <mat-row *cdkRowDef="let row; columns: ['position', 'name', 'timestamp']"></mat-row>
+</mat-table>
