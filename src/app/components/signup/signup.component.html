@@ -1,7 +1,8 @@
 <div class="signup-container">
   <mat-form-field>
-    <input matInput placeholder="First & Last Name" #rsvpName>
+    <input matInput placeholder="First & Last Name" #rsvpName (keyup.enter)="submitRsvp(rsvpName.value); rsvpName.value=''">
   </mat-form-field>
 </div>
-<button mat-raised-button (click)="submitRsvp(rsvpName.value); rsvpName.value=''">
+<button mat-raised-button 
+  (click)="submitRsvp(rsvpName.value); rsvpName.value=''">
   Submit RSVP</button>
