@@ -1,51 +1,59 @@
-import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Injectable } from "@angular/core";
+import { HttpClient, HttpHeaders } from "@angular/common/http";
+import { environment } from "../../environments/environment";
+import { Observable, of } from "rxjs";
+import { catchError, tap } from "rxjs/operators";
 
-import { Observable, of } from 'rxjs';
-import { catchError, tap } from 'rxjs/operators';
-
-import { Rsvp } from '../models/rsvp';
+import { Rsvp } from "../models/rsvp";
 
 const httpOptions = {
-  headers: new HttpHeaders({ 'Content-Type': 'application/json' })
+  headers: new HttpHeaders({ "Content-Type": "application/json" })
 };
 
-@Injectable({ providedIn: 'root' })
+@Injectable({ providedIn: "root" })
 export class BuncoService {
+  private url = environment.production
+    ? `${window.location.origin}/api/rsvps`
+    : "http://localhost:8080/api/rsvps";
 
-  private url = 'api/rsvps';  // URL to web api
-
-  constructor(
-    private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   /** GET RSVPs from the server */
-  getRsvps (): Observable<Rsvp[]> {
-    return this.http.get<Rsvp[]>(this.url)
-      .pipe(
-        tap(rsvps => this.log(`fetched rsvps: ${rsvps.length}`)),
-        catchError(this.handleError('getRsvps', []))
-      );
-  }
-
-  //////// Save methods //////////
-
-  /** POST: add a new hero to the server */
-  addRsvp (rsvp: Rsvp): Observable<Rsvp> {
-    rsvp.timestamp = new Date().toLocaleString();
-    return this.http.post<Rsvp>(this.url, rsvp, httpOptions).pipe(
-      tap((rsvp: Rsvp) => this.log(`added rsvp w/ id=${rsvp.id}`)),
-      catchError(this.handleError<Rsvp>('addRsvp'))
+  getRsvps(): Observable<Rsvp[]> {
+    return this.http.get<Rsvp[]>(this.url).pipe(
+      tap(rsvps => this.log(`fetched rsvps: ${rsvps.length}`)),
+      catchError(this.handleError("getRsvps", []))
     );
   }
 
-  /** DELETE: delete the hero from the server */
-  deleteRsvp (rsvp: Rsvp | number): Observable<Rsvp> {
-    const id = typeof rsvp === 'number' ? rsvp : rsvp.id;
+  /** POST: add a new hero to the server */
+  addRsvp(rsvp: Rsvp): Observable<Rsvp> {
+    rsvp.timestamp = new Date().toLocaleString();
+    return this.http.post<Rsvp>(this.url, rsvp, httpOptions).pipe(
+      tap((rsvp: Rsvp) => this.log(`added rsvp w/ id=${rsvp.id}`)),
+      catchError(this.handleError<Rsvp>("addRsvp"))
+    );
+  }
+
+  /** DELETE: delete all rsvps */
+  deleteRsvps(rsvp: Rsvp | number): Observable<Rsvp> {
+    const id = typeof rsvp === "number" ? rsvp : rsvp.id;
+    const url = `${this.url}/${id}`;
+
+    return this.http.delete<Rsvp>(url, httpOptions).pipe(
+      tap(_ => this.log(`deleted all rsvps`)),
+      catchError(this.handleError<Rsvp>("deleteRsvp"))
+    );
+  }
+
+  /** DELETE: delete the rsvp by id */
+  deleteRsvpById(rsvp: Rsvp | number): Observable<Rsvp> {
+    const id = typeof rsvp === "number" ? rsvp : rsvp.id;
     const url = `${this.url}/${id}`;
 
     return this.http.delete<Rsvp>(url, httpOptions).pipe(
       tap(_ => this.log(`deleted rsvp id=${id}`)),
-      catchError(this.handleError<Rsvp>('deleteRsvp'))
+      catchError(this.handleError<Rsvp>("deleteRsvp"))
     );
   }
 
@@ -55,9 +63,8 @@ export class BuncoService {
    * @param operation - name of the operation that failed
    * @param result - optional value to return as the observable result
    */
-  private handleError<T> (operation = 'operation', result?: T) {
+  private handleError<T>(operation = "operation", result?: T) {
     return (error: any): Observable<T> => {
-
       // TODO: send the error to remote logging infrastructure
       console.error(error); // log to console instead
 
