@@ -18,8 +18,10 @@ export class SignupComponent implements OnInit {
   }
 
   submitRsvp(name: string): void {
-    this.buncoService.addRsvp({ name } as Rsvp).subscribe(rsvp => {
-      this.rsvpStream.next(rsvp);
-    });
+    if (name.trim().length > 0) {
+      this.buncoService.addRsvp({ name } as Rsvp).subscribe(rsvp => {
+        this.rsvpStream.next(rsvp);
+      });
+    }
   }
 }
