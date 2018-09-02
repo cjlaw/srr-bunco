@@ -71,12 +71,13 @@ low(adapter)
       res.json({result: port});
     });
 
+    // Comment this out for now to see if it resolves the issues with the db being cleared
     // Set db default values
-    return db
-      .defaults({
-        rsvps: [{ id: 0, name: "", timestamp: "" }]
-      })
-      .write();
+    // return db
+    //   .defaults({
+    //     rsvps: [{ id: 0, name: "", timestamp: "" }]
+    //   })
+    //   .write();
   })
   .then(() => {
     let port = process.env.PORT || 8080;
