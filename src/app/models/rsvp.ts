@@ -1,5 +1,5 @@
 export class Rsvp {
-  id: number;
+  _id: string;
   position: number;
   name: string;
   timestamp: string;
