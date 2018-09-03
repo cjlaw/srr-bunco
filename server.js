@@ -1,8 +1,22 @@
 const express = require("express");
 const path = require("path");
 const bodyParser = require("body-parser");
-const low = require("lowdb");
-const FileAsync = require("lowdb/adapters/FileAsync");
+require("dotenv").config();
+
+const apiRouter = require("./router.js");
+
+const mongoose = require("mongoose");
+mongoose.Promise = global.Promise;
+mongoose.set("useNewUrlParser", true);
+
+mongoose.connect(process.env.MONGODB_URI).then(
+  () => {
+    console.log("Database is connected");
+  },
+  err => {
+    console.log("Can not connect to the database" + err);
+  }
+);
 
 const app = express();
 app.use(bodyParser.json());
@@ -10,7 +24,7 @@ app.use(bodyParser.json());
 // Serve only the static files form the dist directory
 app.use(express.static("./dist/bunco"));
 
-app.use(function(req, res, next) {
+app.use((req, res, next) => {
   // Website you wish to allow to connect
   res.setHeader("Access-Control-Allow-Origin", "*");
 
@@ -34,54 +48,11 @@ app.use(function(req, res, next) {
   next();
 });
 
-app.get("/", function(req, res) {
-  res.sendFile(path.join(__dirname, "/dist/bunco/index.html"));
+app.use(express.static(path.join(__dirname, "dist/bunco")));
+app.use("/", express.static(path.join(__dirname, "dist/bunco")));
+app.use("/api", apiRouter);
+
+let port = process.env.PORT || 8080;
+app.listen(port, () => {
+  console.log(`Express server listening on port ${port}!`);
 });
-
-const adapter = new FileAsync("db.json");
-low(adapter)
-  .then(db => {
-
-    // Routes
-    app.get("/api/rsvps", (req, res) => {
-      const rsvps = db.get("rsvps").value();
-      res.send(rsvps);
-    });
-
-    app.post("/api/rsvps", (req, res) => {
-      var rsvpsCount = db.get("rsvps").value().length;
-
-      db.get("rsvps")
-        .push(req.body)
-        .last()
-        .assign({ id: Date.now().toString(), position: rsvpsCount })
-        .write()
-        .then(rsvp => res.send(rsvp));
-    });
-
-    app.delete("/api/rsvps", (req, res) => {
-      const rsvps = db.get("rsvps")
-        .remove()
-        .write()
-        .then(() => res.send());
-    });
-
-    app.get("/api/getport", function(req, res) {
-      var port = process.env.PORT;
-      res.json({result: port});
-    });
-
-    // Comment this out for now to see if it resolves the issues with the db being cleared
-    // Set db default values
-    // return db
-    //   .defaults({
-    //     rsvps: [{ id: 0, name: "", timestamp: "" }]
-    //   })
-    //   .write();
-  })
-  .then(() => {
-    let port = process.env.PORT || 8080;
-    app.listen(port, () => {
-      console.log(`Express server listening on port ${port}!`);
-    });
-  });
