@@ -16,8 +16,8 @@ jobs:
 
       # Log the current branch
       - run:
-        name: Show current branch
-        command: echo ${CIRCLE_BRANCH}
+          name: Show current branch
+          command: echo ${CIRCLE_BRANCH}
 
       # Restore local dependencies from cache
       - restore_cache:
@@ -34,6 +34,6 @@ jobs:
 
       # Cache local dependencies if they don't exist
       - save_cache:
-        key: v1-dependencies-{{ checksum "package.json" }}
-        paths:
-          - node_modules
+          key: v1-dependencies-{{ checksum "package.json" }}
+          paths:
+              - node_modules
