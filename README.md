@@ -1,5 +1,6 @@
-# Bunco
+# SRR Bunco Signup App
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 6.1.2.
+[![CircleCI](https://circleci.com/gh/cjlaw/srr-bunco/tree/master.svg?style=svg)](https://circleci.com/gh/cjlaw/srr-bunco/tree/master)
+![Heroku](https://heroku-badge.herokuapp.com/?app=srr-bunco)
 
 Sample application built with Angular 6
