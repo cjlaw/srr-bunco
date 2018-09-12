@@ -29,3 +29,22 @@
   text-align: center;
   padding: 20px;
 }
+
+.header-container {
+  text-align: center;
+  background-color: #91839b;
+  height: 100px;
+}
+
+.header-container img {
+  background-color: #91839b;
+  height: 70px;
+  padding: 15px 0;
+}
+
+.sub-header-container {
+  text-align: center;
+  background-color: #91839b;
+  color: white;
+  padding: 15px 15px;
+}

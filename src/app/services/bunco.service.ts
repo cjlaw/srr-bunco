@@ -76,6 +76,6 @@ export class BuncoService {
   }
 
   private log(message: string) {
-    console.log(`Error occured in bunco.service: ${message}`);
+    console.log(message);
   }
 }

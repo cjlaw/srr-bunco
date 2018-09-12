@@ -12,10 +12,12 @@ export class DashboardComponent implements OnInit {
   constructor(private buncoService: BuncoService) {}
   rsvpSubject = new Subject<Rsvp>();
   rsvpList: Rsvp[];
+  dateObj: Date;
 
   ngOnInit() {
     this.fetchRsvps();
     this.rsvpSubject.subscribe(() => this.fetchRsvps());
+    this.dateObj = new Date();
   }
 
   fetchRsvps(): void {
