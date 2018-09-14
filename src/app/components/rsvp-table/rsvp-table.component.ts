@@ -10,7 +10,7 @@ import { Rsvp } from "../../models/rsvp";
 @Component({
   selector: "app-rsvp-table",
   templateUrl: "./rsvp-table.component.html",
-  styleUrls: ["./rsvp-table.component.css"]
+  styleUrls: ["./rsvp-table.component.scss"]
 })
 export class RsvpTableComponent implements OnInit {
   @Input()

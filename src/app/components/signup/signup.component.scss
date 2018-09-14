@@ -1,0 +1,10 @@
+@import '../../../styles';
+
+button.mat-primary {
+  background-color: $srr-primary !important;
+}
+
+.signup-container {
+  display: flex;
+  flex-direction: column;
+}

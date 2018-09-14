@@ -3,6 +3,6 @@
     <input matInput placeholder="First & Last Name" #rsvpName (keyup.enter)="submitRsvp(rsvpName.value); rsvpName.value=''">
   </mat-form-field>
 </div>
-<button mat-raised-button 
+<button mat-raised-button class="mat-primary"
   (click)="submitRsvp(rsvpName.value); rsvpName.value=''">
   Submit RSVP</button>
