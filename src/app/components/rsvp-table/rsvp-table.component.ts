@@ -13,8 +13,7 @@ import { Rsvp } from "../../models/rsvp";
   styleUrls: ["./rsvp-table.component.scss"]
 })
 export class RsvpTableComponent implements OnInit {
-  @Input()
-  rsvps: Rsvp[];
+  @Input() data: Rsvp[];
   dataSource: Rsvp[];
 
   constructor(private changeDetector: ChangeDetectorRef) {}
@@ -24,8 +23,8 @@ export class RsvpTableComponent implements OnInit {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    this.rsvps = changes.rsvps.currentValue;
-    this.dataSource = this.rsvps;
+    this.data = changes.data.currentValue;
+    this.dataSource = this.data;
     this.changeDetector.detectChanges();
   }
 

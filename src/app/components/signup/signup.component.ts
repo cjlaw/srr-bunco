@@ -9,7 +9,7 @@ import { Subject } from "rxjs";
   styleUrls: ["./signup.component.scss"]
 })
 export class SignupComponent implements OnInit {
-  @Input() public rsvpStream: Subject<Rsvp>;
+  @Input() public data: Subject<Rsvp>;
   constructor(private buncoService: BuncoService) {}
   rsvp: Rsvp;
 
@@ -20,7 +20,7 @@ export class SignupComponent implements OnInit {
   submitRsvp(name: string): void {
     if (name.trim().length > 0) {
       this.buncoService.addRsvp({ name } as Rsvp).subscribe(rsvp => {
-        this.rsvpStream.next(rsvp);
+        this.data.next(rsvp);
       });
     }
   }
