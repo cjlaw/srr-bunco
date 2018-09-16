@@ -3,7 +3,7 @@ const path = require("path");
 const bodyParser = require("body-parser");
 require("dotenv").config();
 
-const apiRouter = require("./router.js");
+const apiRouter = require("./server/router");
 
 const mongoose = require("mongoose");
 mongoose.Promise = global.Promise;
@@ -50,6 +50,7 @@ app.use((req, res, next) => {
 
 app.use(express.static(path.join(__dirname, "dist/bunco")));
 app.use("/", express.static(path.join(__dirname, "dist/bunco")));
+app.use("/admin", express.static(path.join(__dirname, "dist/bunco")));
 app.use("/api", apiRouter);
 
 let port = process.env.PORT || 8080;

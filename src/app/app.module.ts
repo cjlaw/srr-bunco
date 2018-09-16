@@ -8,7 +8,10 @@ import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import {
   MatInputModule,
   MatTableModule,
-  MatButtonModule
+  MatButtonModule,
+  MatDatepickerModule,
+  MatNativeDateModule,
+  MatCardModule
 } from "@angular/material";
 import { CdkTableModule } from "@angular/cdk/table";
 
@@ -16,6 +19,7 @@ import { AppComponent } from "./app.component";
 import { SignupComponent } from "./components/signup/signup.component";
 import { RsvpTableComponent } from "./components/rsvp-table/rsvp-table.component";
 import { DashboardComponent } from "./components/dashboard/dashboard.component";
+import { AdminDashboardComponent } from './components/admin-dashboard/admin-dashboard.component';
 
 @NgModule({
   imports: [
@@ -27,13 +31,17 @@ import { DashboardComponent } from "./components/dashboard/dashboard.component";
     MatInputModule,
     MatTableModule,
     MatButtonModule,
-    CdkTableModule
+    CdkTableModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    MatCardModule
   ],
   declarations: [
     AppComponent,
     SignupComponent,
     RsvpTableComponent,
-    DashboardComponent
+    DashboardComponent,
+    AdminDashboardComponent
   ],
   bootstrap: [AppComponent]
 })

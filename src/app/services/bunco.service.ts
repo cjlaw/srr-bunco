@@ -5,6 +5,7 @@ import { Observable, of } from "rxjs";
 import { catchError, tap } from "rxjs/operators";
 
 import { Rsvp } from "../models/rsvp";
+import { Event } from "../models/event";
 
 const httpOptions = {
   headers: new HttpHeaders({ "Content-Type": "application/json" })
@@ -36,7 +37,7 @@ export class BuncoService {
   }
 
   /** DELETE: delete all rsvps */
-  deleteRsvps(rsvp: Rsvp | string): Observable<Rsvp> {
+  deleteRsvps(): Observable<Rsvp> {
     const url = `${this.url}/rsvp-all`;
 
     return this.http.delete<Rsvp>(url, httpOptions).pipe(
@@ -53,6 +54,22 @@ export class BuncoService {
     return this.http.delete<Rsvp>(url, httpOptions).pipe(
       tap(_ => this.log(`deleted rsvp id=${id}`)),
       catchError(this.handleError<Rsvp>("deleteRsvp"))
+    );
+  }
+
+  /** GET the event from the server */
+  getEvent(): Observable<Event> {
+    return this.http.get<Event>(`${this.url}/event`, httpOptions).pipe(
+      tap((event: Event) => this.log(`fetched event: ${event ? event.date : event}`)),
+      catchError(this.handleError<Event>("getEvents"))
+    );
+  }
+
+  /** POST: update an event on the server */
+  updateEvent(newDate: Date): Observable<Event> {
+    return this.http.post<Event>(`${this.url}/event`, { date: newDate }, httpOptions).pipe(
+      tap((event: Event) => this.log(`updated event: ${event.date}`)),
+      catchError(this.handleError<Event>("updateEvent"))
     );
   }
 

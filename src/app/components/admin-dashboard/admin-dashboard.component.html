@@ -1,0 +1,24 @@
+<div class="header-container">
+  <img src="assets/srr_logo.png" alt="Santa Rita Ranch">
+</div>
+
+<div class="flex-container">
+  <div class="flex-item">
+    <mat-card>
+      <mat-card-subtitle>Manage Event Date</mat-card-subtitle>
+      <mat-form-field>
+        <input matInput [matDatepicker]="picker" placeholder="Choose an event date" disabled [ngModel]="eventDate"
+          (dateInput)="updateEventDate('input', $event)" (dateChange)="updateEventDate('change', $event)">
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker touchUi disabled="false"></mat-datepicker>
+      </mat-form-field>
+    </mat-card>
+  </div>
+  <div class="flex-item">
+    <mat-card>
+      <mat-card-subtitle>Manage Signup List</mat-card-subtitle>
+      <button mat-raised-button class="mat-warn" (click)="deleteRsvps()">
+        Reset Signup List</button>
+    </mat-card>
+  </div>
+</div>

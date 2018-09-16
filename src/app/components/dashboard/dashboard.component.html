@@ -1,8 +1,8 @@
 <div class="header-container">
   <img src="assets/srr_logo.png" alt="Santa Rita Ranch">
 </div>
-<div class="sub-header-container">
-  <h2>Bunco Signups for {{ dateObj | date:"fullDate" }}</h2>
+<div class="sub-header-container" *ngIf="eventDate">
+  <h2>Bunco Signups for {{ eventDate | date:"fullDate" }}</h2>
 </div>
 <div class="flex-container">
   <div class="flex-item">

@@ -12,15 +12,23 @@ export class DashboardComponent implements OnInit {
   constructor(private buncoService: BuncoService) {}
   rsvpSubject = new Subject<Rsvp>();
   rsvpList: Rsvp[];
-  dateObj: Date;
+  eventDateSubject = new Subject<Date>();
+  eventDate: Date;
 
   ngOnInit() {
     this.fetchRsvps();
+    this.fetchEvent();
     this.rsvpSubject.subscribe(() => this.fetchRsvps());
-    this.dateObj = new Date();
+    this.eventDateSubject.subscribe(() => this.fetchEvent());
   }
 
   fetchRsvps(): void {
     this.buncoService.getRsvps().subscribe(rsvps => (this.rsvpList = rsvps));
+  }
+
+  fetchEvent(): void {
+    this.buncoService.getEvent().subscribe(event => {
+      if (event) this.eventDate = event.date;
+    });
   }
 }

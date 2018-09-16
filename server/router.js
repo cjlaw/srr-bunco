@@ -1,7 +1,7 @@
 var express = require("express");
 var router = express.Router();
-var mongoose = require("mongoose");
-var Rsvp = require("./models.js");
+var Rsvp = require("./rsvpModel");
+var Event = require("./eventModel");
 
 /* GET ALL RSVPS */
 router.get("/rsvp", async (req, res, next) => {
@@ -75,6 +75,39 @@ router.delete("/rsvp-all", async (req, res, next) => {
   }
 });
 
+/* GET EVENT */
+router.get("/event", async (req, res, next) => {
+  try {
+    let result = await getEvent();
+    res.json(result);
+  } catch (e) {
+    logError(e);
+    res.status(500).send(e);
+  }
+});
+
+/* SAVE EVENT */
+router.post("/event", async (req, res, next) => {
+  try {
+    let result = await updateEvent(req.body);
+    res.json(result);
+  } catch (e) {
+    logError(e);
+    res.status(500).send(e);
+  }
+});
+
+/* DELETE EVENT */
+router.delete("/event", async (req, res, next) => {
+  try {
+    let result = await deleteAllInCollection(Event);
+    res.json(result);
+  } catch (e) {
+    logError(e);
+    res.status(500).send(e);
+  }
+});
+
 const logError = e => {
   console.log(`An error has ocurred: ${e}`);
 };
@@ -138,6 +171,27 @@ const deleteAllInCollection = collection => {
     collection.deleteMany((err, results) => {
       if (err) reject(err);
       resolve(results);
+    });
+  });
+};
+
+const getEvent = () => {
+  return new Promise((resolve, reject) => {
+    Event.findOne(
+      {},
+      (err, res) => {
+        if (err) reject(err);
+        resolve(res);
+      }
+    );
+  });
+};
+
+const updateEvent = item => {
+  return new Promise((resolve, reject) => {
+    Event.findOneAndUpdate({}, item, { upsert: true, new: true }, (err, res) => {
+      if (err) reject(err);
+      resolve(res);
     });
   });
 };
