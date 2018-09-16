@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter, Input } from "@angular/core";
+import { Component, OnInit, Input } from "@angular/core";
 import { Rsvp } from "../../models/rsvp";
 import { BuncoService } from "../../services/bunco.service";
 import { Subject } from "rxjs";
