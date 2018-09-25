@@ -7,6 +7,7 @@ import {
 import { HttpClient, HttpHandler } from "@angular/common/http";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { CdkTableModule } from "@angular/cdk/table";
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { DashboardComponent } from "./dashboard.component";
 import { SignupComponent } from "../signup/signup.component";
 import { RsvpTableComponent } from "../rsvp-table/rsvp-table.component";
@@ -23,7 +24,9 @@ describe("DashboardComponent", () => {
         MatButtonModule,
         MatTableModule,
         CdkTableModule,
-        BrowserAnimationsModule
+        BrowserAnimationsModule,
+        FormsModule,
+        ReactiveFormsModule
       ],
       providers: [HttpClient, HttpHandler]
     }).compileComponents();

@@ -2,6 +2,7 @@ import { async, ComponentFixture, TestBed } from "@angular/core/testing";
 import { MatInputModule, MatButtonModule } from "@angular/material";
 import { HttpClient, HttpHandler } from "@angular/common/http";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 
 import { SignupComponent } from "./signup.component";
 
@@ -12,7 +13,13 @@ describe("SignupComponent", () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [SignupComponent],
-      imports: [MatInputModule, MatButtonModule, BrowserAnimationsModule],
+      imports: [
+        MatInputModule,
+        MatButtonModule,
+        BrowserAnimationsModule,
+        FormsModule,
+        ReactiveFormsModule
+      ],
       providers: [HttpClient, HttpHandler]
     }).compileComponents();
   }));
