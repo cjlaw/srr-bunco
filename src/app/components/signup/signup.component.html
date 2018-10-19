@@ -1,8 +1,11 @@
 <div class="signup-container">
   <mat-form-field>
     <input matInput placeholder="First & Last Name" #rsvpName (keyup.enter)="submitRsvp(rsvpName.value); rsvpName.value=''"
-      [formControl]="nameFormControl" [errorStateMatcher]="matcher">
+      [formControl]="nameFormControl">
     <mat-hint>Only one entry per person</mat-hint>
+    <mat-error *ngIf="nameFormControl.hasError('required')">
+      Please enter a first & last name
+    </mat-error>
     <mat-error *ngIf="nameFormControl.hasError('alreadySubmitted')">
       Sorry, you've already submitted an entry
     </mat-error>
