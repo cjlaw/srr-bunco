@@ -30,7 +30,7 @@ jobs:
       - run: npm install
         
       # Run tests!
-      # - run: npm test
+       - run: npm test
 
       # Cache local dependencies if they don't exist
       - save_cache:
