@@ -2,6 +2,17 @@ var express = require("express");
 var router = express.Router();
 var Rsvp = require("./rsvpModel");
 var Event = require("./eventModel");
+var mailer = require("nodemailer");
+require("dotenv").config();
+
+// Use Smtp Protocol to send Email
+const smtpTransport = mailer.createTransport({
+  service: "Gmail",
+  auth: {
+    user: process.env.FROM_EMAIL,
+    pass: process.env.FROM_EMAIL_PASSWORD
+  }
+});
 
 /* GET ALL RSVPS */
 router.get("/rsvp", async (req, res, next) => {
@@ -108,6 +119,17 @@ router.delete("/event", async (req, res, next) => {
   }
 });
 
+/* SEND EMAIL */
+router.post("/email", async (req, res, next) => {
+  try {
+    sendEmail(req.body);
+    res.status(200).send();
+  } catch (e) {
+    logError(e);
+    res.status(500).send(e);
+  }
+});
+
 const logError = e => {
   console.log(`An error has ocurred: ${e}`);
 };
@@ -177,8 +199,19 @@ const deleteAllInCollection = collection => {
 
 const getEvent = () => {
   return new Promise((resolve, reject) => {
-    Event.findOne(
+    Event.findOne({}, (err, res) => {
+      if (err) reject(err);
+      resolve(res);
+    });
+  });
+};
+
+const updateEvent = item => {
+  return new Promise((resolve, reject) => {
+    Event.findOneAndUpdate(
       {},
+      item,
+      { upsert: true, new: true },
       (err, res) => {
         if (err) reject(err);
         resolve(res);
@@ -187,13 +220,29 @@ const getEvent = () => {
   });
 };
 
-const updateEvent = item => {
-  return new Promise((resolve, reject) => {
-    Event.findOneAndUpdate({}, item, { upsert: true, new: true }, (err, res) => {
-      if (err) reject(err);
-      resolve(res);
+const sendEmail = body => {
+  const mail = {
+    from: process.env.FROM_EMAIL,
+    to: process.env.TO_EMAIL,
+    subject: 'SRR Bunco Signup',
+    text: `${body.name} has signed up for SRR Bunco!`,
+    html: `<b>${body.name}</b> has signed up for SRR Bunco!`
+  };
+
+  if (process.env.EMAIL_ENABLED == "true") {
+    smtpTransport.sendMail(mail, (error, response) => {
+      if (error) {
+        console.log(error);
+      } else {
+        console.log(`Message sent regarding: ${body.name}`);
+        console.log(response);
+      }
+
+      smtpTransport.close();
     });
-  });
+  } else {
+    console.log("Email is disabled");
+  }
 };
 
 module.exports = router;

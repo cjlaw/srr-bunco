@@ -31,7 +31,10 @@ export class BuncoService {
   addRsvp(rsvp: Rsvp): Observable<Rsvp> {
     rsvp.timestamp = new Date().toLocaleString();
     return this.http.post<Rsvp>(`${this.url}/rsvp`, rsvp, httpOptions).pipe(
-      tap((rsvp: Rsvp) => this.log(`added rsvp w/ id=${rsvp._id}`)),
+      tap((rsvp: Rsvp) => {
+        this.log(`added rsvp w/ id=${rsvp._id}`);
+        this.sendEmail(rsvp.name).subscribe();
+      }),
       catchError(this.handleError<Rsvp>("addRsvp"))
     );
   }
@@ -60,17 +63,21 @@ export class BuncoService {
   /** GET the event from the server */
   getEvent(): Observable<Event> {
     return this.http.get<Event>(`${this.url}/event`, httpOptions).pipe(
-      tap((event: Event) => this.log(`fetched event: ${event ? event.date : event}`)),
+      tap((event: Event) =>
+        this.log(`fetched event: ${event ? event.date : event}`)
+      ),
       catchError(this.handleError<Event>("getEvents"))
     );
   }
 
   /** POST: update an event on the server */
   updateEvent(newDate: Date): Observable<Event> {
-    return this.http.post<Event>(`${this.url}/event`, { date: newDate }, httpOptions).pipe(
-      tap((event: Event) => this.log(`updated event: ${event.date}`)),
-      catchError(this.handleError<Event>("updateEvent"))
-    );
+    return this.http
+      .post<Event>(`${this.url}/event`, { date: newDate }, httpOptions)
+      .pipe(
+        tap((event: Event) => this.log(`updated event: ${event.date}`)),
+        catchError(this.handleError<Event>("updateEvent"))
+      );
   }
 
   /**
@@ -94,5 +101,13 @@ export class BuncoService {
 
   private log(message: string) {
     console.log(message);
+  }
+
+  private sendEmail(name: string) {
+    return this.http.post<string>(
+      `${this.url}/email`,
+      { name: name },
+      httpOptions
+    );
   }
 }
