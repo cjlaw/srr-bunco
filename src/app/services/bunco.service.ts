@@ -13,7 +13,7 @@ const httpOptions = {
 
 @Injectable({ providedIn: "root" })
 export class BuncoService {
-  private url = environment.production
+  public url = environment.production
     ? `${window.location.origin}/api`
     : "http://localhost:8080/api";
 
@@ -27,7 +27,7 @@ export class BuncoService {
     );
   }
 
-  /** POST: add a new hero to the server */
+  /** POST: add an RSVP to the server */
   addRsvp(rsvp: Rsvp): Observable<Rsvp> {
     rsvp.timestamp = new Date().toLocaleString();
     return this.http.post<Rsvp>(`${this.url}/rsvp`, rsvp, httpOptions).pipe(
