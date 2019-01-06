@@ -1,3 +1,4 @@
+/* Flex Styles */
 .flex-container {
   display: -ms-flexbox;
   display: -webkit-flex;
@@ -30,6 +31,7 @@
   padding: 5px 20px 20px 20px;
 }
 
+/* Header Styles */
 .header-container {
   text-align: center;
   background-color: #91839b;
@@ -47,4 +49,15 @@
   background-color: #91839b;
   color: white;
   padding: 15px 15px;
+}
+
+/* Footer Styles */
+footer {
+  text-align: center;
+  color: #91839b;
+  padding: 15px 15px 0px 15px;
+}
+
+footer a {
+  color: #91839b;
 }
