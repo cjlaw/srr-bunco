@@ -6,7 +6,7 @@
 </div>
 <div class="flex-container">
   <div class="flex-item">
-    <app-signup [data]="rsvpSubject"></app-signup>
+    <app-signup [eventDate]="eventDate" [entrySubmitted]="entrySubmitted" (rsvpSubmitted)="submitRsvp($event)"></app-signup>
   </div>
   <div class="flex-item">
     <app-rsvp-table [data]="rsvpList"></app-rsvp-table>

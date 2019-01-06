@@ -1,7 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { Rsvp } from "../../models/rsvp";
 import { BuncoService } from "../../services/bunco.service";
-import { Subject } from "rxjs";
 
 @Component({
   selector: "app-dashboard",
@@ -10,16 +9,14 @@ import { Subject } from "rxjs";
 })
 export class DashboardComponent implements OnInit {
   constructor(private buncoService: BuncoService) {}
-  rsvpSubject = new Subject<Rsvp>();
+
   rsvpList: Rsvp[];
-  eventDateSubject = new Subject<Date>();
   eventDate: Date;
+  entrySubmitted: boolean;
 
   ngOnInit() {
     this.fetchRsvps();
     this.fetchEvent();
-    this.rsvpSubject.subscribe(() => this.fetchRsvps());
-    this.eventDateSubject.subscribe(() => this.fetchEvent());
   }
 
   fetchRsvps(): void {
@@ -29,6 +26,23 @@ export class DashboardComponent implements OnInit {
   fetchEvent(): void {
     this.buncoService.getEvent().subscribe(event => {
       if (event) this.eventDate = event.date;
+
+      // Compare dates to see if entrySubmitted property needs to be reset
+      let storedEventDate = localStorage.getItem("eventDate");
+      if (storedEventDate && this.eventDate.toString() != storedEventDate) {
+        localStorage.removeItem("entrySubmitted");
+      }
+
+      this.entrySubmitted = localStorage.getItem("entrySubmitted") === "true";
+    });
+  }
+
+  submitRsvp(name: string): void {
+    this.buncoService.addRsvp({ name } as Rsvp).subscribe(() => {
+      localStorage.setItem("entrySubmitted", "true");
+      localStorage.setItem("eventDate", this.eventDate.toString());
+
+      this.fetchRsvps();
     });
   }
 }
