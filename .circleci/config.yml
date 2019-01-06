@@ -26,11 +26,11 @@ jobs:
           # fallback to using the latest cache if no exact match is found
           - v1-dependencies-
 
-       # Install project dependencies
+      # Install project dependencies
       - run: npm install
         
       # Run tests!
-       - run: npm test
+      - run: npm test
 
       # Cache local dependencies if they don't exist
       - save_cache:
