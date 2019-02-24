@@ -2,6 +2,7 @@ var express = require("express");
 var router = express.Router();
 var Rsvp = require("./rsvpModel");
 var Event = require("./eventModel");
+var Config = require("./configModel");
 var mailer = require("nodemailer");
 require("dotenv").config();
 
@@ -89,7 +90,7 @@ router.delete("/rsvp-all", async (req, res, next) => {
 /* GET EVENT */
 router.get("/event", async (req, res, next) => {
   try {
-    let result = await getEvent();
+    let result = await getSingleItem(Event);
     res.json(result);
   } catch (e) {
     logError(e);
@@ -100,7 +101,7 @@ router.get("/event", async (req, res, next) => {
 /* SAVE EVENT */
 router.post("/event", async (req, res, next) => {
   try {
-    let result = await updateEvent(req.body);
+    let result = await updateSingleItem(Event, req.body);
     res.json(result);
   } catch (e) {
     logError(e);
@@ -119,10 +120,32 @@ router.delete("/event", async (req, res, next) => {
   }
 });
 
+/* GET CONFIG */
+router.get("/config", async (req, res, next) => {
+  try {
+    let result = await getSingleItem(Config);
+    res.json(result);
+  } catch (e) {
+    logError(e);
+    res.status(500).send(e);
+  }
+});
+
+/* SAVE CONFIG */
+router.post("/config", async (req, res, next) => {
+  try {
+    let result = await updateSingleItem(Config, req.body);
+    res.json(result);
+  } catch (e) {
+    logError(e);
+    res.status(500).send(e);
+  }
+});
+
 /* SEND EMAIL */
 router.post("/email", async (req, res, next) => {
   try {
-    sendEmail(req.body);
+    let result = await sendEmail(req.body);
     res.status(200).send();
   } catch (e) {
     logError(e);
@@ -197,18 +220,18 @@ const deleteAllInCollection = collection => {
   });
 };
 
-const getEvent = () => {
+const getSingleItem = type => {
   return new Promise((resolve, reject) => {
-    Event.findOne({}, (err, res) => {
+    type.findOne({}, (err, res) => {
       if (err) reject(err);
       resolve(res);
     });
   });
 };
 
-const updateEvent = item => {
+const updateSingleItem = (type, item) => {
   return new Promise((resolve, reject) => {
-    Event.findOneAndUpdate(
+    type.findOneAndUpdate(
       {},
       item,
       { upsert: true, new: true },
@@ -220,29 +243,37 @@ const updateEvent = item => {
   });
 };
 
-const sendEmail = body => {
-  const mail = {
-    from: process.env.FROM_EMAIL,
-    to: process.env.TO_EMAIL,
-    subject: 'SRR Bunco Signup',
-    text: `${body.name} has signed up for SRR Bunco!`,
-    html: `<b>${body.name}</b> has signed up for SRR Bunco!`
-  };
+const sendEmail = async (body) => {
+  const config = await getSingleItem(Config);
 
-  if (process.env.EMAIL_ENABLED == "true") {
-    smtpTransport.sendMail(mail, (error, response) => {
-      if (error) {
-        console.log(error);
-      } else {
-        console.log(`Message sent regarding: ${body.name}`);
-        console.log(response);
-      }
+  return new Promise((resolve, reject) => {
+    if (config.sendEmails == true && config.adminEmailAddress) {
+      const mail = {
+        from: process.env.FROM_EMAIL,
+        to: config.adminEmailAddress,
+        subject: 'SRR Bunco Signup',
+        text: `${body.name} has signed up for SRR Bunco!`,
+        html: `<b>${body.name}</b> has signed up for SRR Bunco!`
+      };
 
-      smtpTransport.close();
-    });
-  } else {
-    console.log("Email is disabled");
-  }
+      smtpTransport.sendMail(mail, (error, response) => {
+        if (error) {
+          console.log(error);
+          reject(error);
+        } else {
+          console.log(`Message sent regarding: ${body.name}`);
+          console.log(response);
+          resolve();
+        }
+
+        smtpTransport.close();
+      });
+    } else {
+      console.log("Email not sent:");
+      console.log(config);
+      resolve();
+    }
+  });
 };
 
 module.exports = router;
