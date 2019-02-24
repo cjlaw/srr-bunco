@@ -6,6 +6,7 @@ import {
 import { Event } from "../models/event";
 import { BuncoService } from "./bunco.service";
 import { Rsvp } from "../models/rsvp";
+import { Config } from "../models/config";
 
 describe("BuncoService", () => {
   let buncoService: BuncoService;
@@ -105,6 +106,40 @@ describe("BuncoService", () => {
     const req = httpMock.expectOne(`${buncoService.url}/event`);
     expect(req.request.method).toBe("POST");
     req.flush(dummyEvent);
+
+    httpMock.verify();
+  });
+
+  it("should successfully get the config", () => {
+    const dummyConfig: Config = {
+      sendEmails: false,
+      adminEmailAddress: "some@email.com"
+    };
+
+    buncoService.getConfig().subscribe(res => {
+      expect(res).toEqual(dummyConfig);
+    });
+
+    const req = httpMock.expectOne(`${buncoService.url}/config`);
+    expect(req.request.method).toBe("GET");
+    req.flush(dummyConfig);
+
+    httpMock.verify();
+  });
+
+  it("should successfully update the config", () => {
+    const dummyConfig: Config = {
+      sendEmails: false,
+      adminEmailAddress: "new@email.com"
+    };
+
+    buncoService.updateConfig(dummyConfig).subscribe(res => {
+      expect(res).toEqual(dummyConfig);
+    });
+
+    const req = httpMock.expectOne(`${buncoService.url}/config`);
+    expect(req.request.method).toBe("POST");
+    req.flush(dummyConfig);
 
     httpMock.verify();
   });

@@ -6,6 +6,7 @@ import { catchError, tap } from "rxjs/operators";
 
 import { Rsvp } from "../models/rsvp";
 import { Event } from "../models/event";
+import { Config } from "../models/config";
 
 const httpOptions = {
   headers: new HttpHeaders({ "Content-Type": "application/json" })
@@ -77,6 +78,26 @@ export class BuncoService {
       .pipe(
         tap((event: Event) => this.log(`updated event: ${event.date}`)),
         catchError(this.handleError<Event>("updateEvent"))
+      );
+  }
+
+  /** GET the config from the server */
+  getConfig(): Observable<Config> {
+    return this.http.get<Config>(`${this.url}/config`, httpOptions).pipe(
+      tap((config: Config) =>
+        this.log(`fetched config: ${config}`)
+      ),
+      catchError(this.handleError<Config>("getConfig"))
+    );
+  }
+
+  /** POST: update the config on the server */
+  updateConfig(config: Config): Observable<Config> {
+    return this.http
+      .post<Config>(`${this.url}/config`, config, httpOptions)
+      .pipe(
+        tap((config: Config) => this.log(`updated config: ${config}`)),
+        catchError(this.handleError<Config>("updateConfig"))
       );
   }
 
