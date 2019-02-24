@@ -11,7 +11,9 @@ import {
   MatButtonModule,
   MatDatepickerModule,
   MatNativeDateModule,
-  MatCardModule
+  MatCardModule,
+  MatCheckboxModule,
+  MatIconModule
 } from "@angular/material";
 import { CdkTableModule } from "@angular/cdk/table";
 
@@ -35,6 +37,8 @@ import { AdminDashboardComponent } from './components/admin-dashboard/admin-dash
     MatDatepickerModule,
     MatNativeDateModule,
     MatCardModule,
+    MatCheckboxModule,
+    MatIconModule,
     ReactiveFormsModule
   ],
   declarations: [

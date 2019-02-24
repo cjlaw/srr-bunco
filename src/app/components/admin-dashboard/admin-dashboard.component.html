@@ -1,5 +1,5 @@
 <div class="header-container">
-  <img src="assets/srr_logo.png" alt="Santa Rita Ranch">
+  <img src="assets/srr_logo.png" alt="Santa Rita Ranch" />
 </div>
 
 <div class="flex-container">
@@ -7,8 +7,15 @@
     <mat-card>
       <mat-card-subtitle>Manage Event Date</mat-card-subtitle>
       <mat-form-field>
-        <input matInput [matDatepicker]="picker" placeholder="Choose an event date" disabled [ngModel]="eventDate"
-          (dateInput)="updateEventDate('input', $event)" (dateChange)="updateEventDate('change', $event)">
+        <input
+          matInput
+          [matDatepicker]="picker"
+          placeholder="Choose an event date"
+          disabled
+          [ngModel]="eventDate"
+          (dateInput)="updateEventDate('input', $event)"
+          (dateChange)="updateEventDate('change', $event)"
+        />
         <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
         <mat-datepicker #picker touchUi disabled="false"></mat-datepicker>
       </mat-form-field>
@@ -18,7 +25,47 @@
     <mat-card>
       <mat-card-subtitle>Manage Signup List</mat-card-subtitle>
       <button mat-raised-button class="mat-warn" (click)="deleteRsvps()">
-        Reset Signup List</button>
+        Reset Signup List
+      </button>
+    </mat-card>
+  </div>
+  <div class="flex-item">
+    <mat-card>
+      <mat-card-subtitle>Manage Emails</mat-card-subtitle>
+      <div>
+        <mat-checkbox
+          [(ngModel)]="sendEmails"
+          (change)="handleSendEmailChange()"
+          >I want to receive emails</mat-checkbox
+        >
+      </div>
+      <div>
+        <mat-form-field style="width: 75%; padding-top: 10px;">
+          <input
+            matInput
+            type="email"
+            placeholder="Email Address"
+            [(ngModel)]="adminEmailAddress"
+            (keyup.enter)="setAdminEmail()"
+            [disabled]="!sendEmails"
+          />
+          <button
+            mat-button
+            *ngIf="adminEmailAddress"
+            matSuffix
+            mat-icon-button
+            aria-label="Clear"
+            (click)="adminEmailAddress = ''"
+          >
+            <mat-icon>X</mat-icon>
+          </button>
+        </mat-form-field>
+      </div>
+      <div>
+        <button mat-raised-button class="mat-primary" (click)="setAdminEmail()" [disabled]="!sendEmails">
+          Save Email
+        </button>
+      </div>
     </mat-card>
   </div>
 </div>

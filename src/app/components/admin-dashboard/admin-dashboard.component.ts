@@ -9,10 +9,19 @@ import { MatDatepickerInputEvent } from "@angular/material/datepicker";
 })
 export class AdminDashboardComponent implements OnInit {
   eventDate: Date;
+  sendEmails: boolean;
+  adminEmailAddress: string;
 
   constructor(private buncoService: BuncoService) {
     this.buncoService.getEvent().subscribe(event => {
       if (event) this.eventDate = event.date;
+    });
+
+    this.buncoService.getConfig().subscribe(config => {
+      if (config) {
+        this.adminEmailAddress = config.adminEmailAddress;
+        this.sendEmails = config.sendEmails;
+      }
     });
   }
 
@@ -29,5 +38,19 @@ export class AdminDashboardComponent implements OnInit {
 
   deleteRsvps(): void {
     this.buncoService.deleteRsvps().subscribe();
+  }
+
+  setAdminEmail(): void {
+    this.buncoService.updateConfig({ sendEmails: this.sendEmails, adminEmailAddress: this.adminEmailAddress}).subscribe();
+  }
+
+  handleSendEmailChange(): void {
+    this.adminEmailAddress = this.sendEmails ? this.adminEmailAddress : "";
+    this.buncoService.updateConfig({ sendEmails: this.sendEmails, adminEmailAddress: this.adminEmailAddress }).subscribe(config => {
+      if (config) {
+        this.adminEmailAddress = config.adminEmailAddress;
+        this.sendEmails = config.sendEmails;
+      }
+    });
   }
 }
