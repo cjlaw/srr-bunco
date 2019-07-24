@@ -9,17 +9,18 @@
     "lint": "ng lint",
     "e2e": "ng e2e",
     "heroku-postbuild": "ng build --prod",
-    "start": "node server.js"
+    "start": "node server.js",
+    "start-db": "mongod --dbpath /Users/casey/dev/data"
   },
   "private": true,
   "dependencies": {
-    "@angular-devkit/build-angular": "~0.7.0",
+    "@angular-devkit/build-angular": "^0.13.6",
     "@angular/animations": "^6.1.1",
     "@angular/cdk": "^6.4.2",
     "@angular/cli": "^6.2.2",
     "@angular/common": "^6.1.0",
     "@angular/compiler": "^6.1.0",
-    "@angular/compiler-cli": "^6.1.0",
+    "@angular/compiler-cli": "^7.2.10",
     "@angular/core": "^6.1.0",
     "@angular/forms": "^6.1.0",
     "@angular/http": "^6.1.0",
@@ -34,7 +35,7 @@
     "nodemailer": "^4.6.8",
     "path": "^0.12.7",
     "rxjs": "^6.3.2",
-    "typescript": "~2.7.2",
+    "typescript": "^3.2.4",
     "zone.js": "~0.8.26"
   },
   "devDependencies": {
@@ -45,7 +46,7 @@
     "codelyzer": "~4.2.1",
     "jasmine-core": "~2.99.1",
     "jasmine-spec-reporter": "~4.2.1",
-    "karma": "^3.0.0",
+    "karma": "^4.0.1",
     "karma-chrome-launcher": "~2.2.0",
     "karma-coverage-istanbul-reporter": "~2.0.0",
     "karma-jasmine": "~1.1.1",
